@@ -1,14 +1,16 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Share} from 'react-native';
 import {Quote} from '../types/quote';
 
 /**
- * Reusable card that displays a quote with favorite and action buttons.
+ * Reusable card that displays a quote with favorite, share, and new quote actions.
  *
  * Flutter parallel: This is a custom StatelessWidget — a pure UI component
  * that receives data and callbacks via props (like constructor params in Flutter).
  * TouchableOpacity = InkWell/GestureDetector with built-in opacity feedback.
  * ActivityIndicator = CircularProgressIndicator.
+ * Share.share() = Share.share() from the share_plus package in Flutter — opens
+ * the native OS share sheet (same on both Android and iOS).
  */
 
 interface QuoteCardProps {
@@ -19,6 +21,16 @@ interface QuoteCardProps {
   onToggleFavorite: () => void;
   onNewQuote: () => void;
 }
+
+const shareQuote = async (quote: Quote) => {
+  try {
+    await Share.share({
+      message: `"${quote.quote}" — ${quote.author}\n\nShared via QuoteSpace`,
+    });
+  } catch {
+    // User cancelled or share failed — no action needed
+  }
+};
 
 const QuoteCard = ({
   quote,
@@ -74,6 +86,13 @@ const QuoteCard = ({
           onPress={onNewQuote}
           activeOpacity={0.7}>
           <Text style={styles.newQuoteText}>New Quote</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => shareQuote(quote)}
+          activeOpacity={0.7}>
+          <Text style={styles.shareIcon}>↗</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -140,6 +159,10 @@ const styles = StyleSheet.create({
   },
   heartFilled: {
     color: '#e17055',
+  },
+  shareIcon: {
+    fontSize: 22,
+    color: '#636e72',
   },
   newQuoteButton: {
     paddingHorizontal: 24,
