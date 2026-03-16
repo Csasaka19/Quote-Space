@@ -1,19 +1,11 @@
-import React from 'react';
-import {View, Text, StyleSheet, FlatList, TouchableOpacity, Share} from 'react-native';
+import React, {useState, useCallback} from 'react';
+import {View, Text, StyleSheet, FlatList, TouchableOpacity, Share, RefreshControl} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import {useFavoritesContext} from '../hooks/FavoritesContext';
 import {Quote} from '../types/quote';
 
-/**
- * Favorites screen — browse and manage saved quotes.
- *
- * Flutter parallel:
- * - Dismissible widget = swipe-to-delete. Here we use a button instead for
- *   clearer UX, but you could add Swipeable from react-native-gesture-handler
- *   for the same swipe behavior as Flutter's Dismissible.
- * - Share.share() = share_plus package — same native share sheet.
- */
+/** Favorites screen — browse and manage saved quotes with pull-to-refresh. */
 
 const shareQuote = async (quote: Quote) => {
   try {
@@ -27,7 +19,14 @@ const shareQuote = async (quote: Quote) => {
 
 const FavoritesScreen = () => {
   const insets = useSafeAreaInsets();
-  const {favorites, loading, removeFavorite} = useFavoritesContext();
+  const {favorites, loading, reloadFavorites, removeFavorite} = useFavoritesContext();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await reloadFavorites();
+    setRefreshing(false);
+  }, [reloadFavorites]);
 
   if (loading) {
     return (
@@ -68,6 +67,14 @@ const FavoritesScreen = () => {
             keyExtractor={(item, index) => `${item.author}-${index}`}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                tintColor="rgba(255,255,255,0.7)"
+                colors={['#667eea']}
+              />
+            }
             renderItem={({item}) => (
               <View style={styles.card}>
                 <Text style={styles.cardQuote}>"{item.quote}"</Text>

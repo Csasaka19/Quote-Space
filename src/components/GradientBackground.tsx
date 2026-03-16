@@ -4,18 +4,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import {GRADIENT_PRESETS} from '../utils/constants';
 
 /**
- * Animated gradient background that smoothly transitions between color presets.
- *
- * Flutter parallel:
- * - This is like an AnimatedContainer with a gradient BoxDecoration, but we
- *   handle the animation manually with Animated.Value (= AnimationController).
- * - Animated.Value is React Native's equivalent of AnimationController + Tween.
- * - Animated.timing = Tween.animate() with a specific duration and curve.
- * - The opacity cross-fade approach is like using FadeTransition between two
- *   Container widgets with different gradients stacked in a Stack widget.
- *
- * Why cross-fade? LinearGradient doesn't support animating color props directly
- * (same limitation in Flutter). So we layer two gradients and fade between them.
+ * Animated gradient background that cross-fades between color presets.
+ * Two LinearGradient layers are stacked and opacity-animated because
+ * gradient colors cannot be directly animated.
  */
 
 interface GradientBackgroundProps {

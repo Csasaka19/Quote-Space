@@ -3,24 +3,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Quote} from '../types/quote';
 import {STORAGE_KEYS} from '../utils/constants';
 
-/**
- * Custom hook for managing favorite quotes with AsyncStorage persistence.
- *
- * Flutter parallel: This is like a ChangeNotifier + SharedPreferences combo.
- * - useState = ValueNotifier / setState
- * - useEffect = initState + didChangeDependencies
- * - useCallback = memoized method (prevents unnecessary rebuilds)
- *
- * In Flutter you'd wrap this in a Provider. In React, hooks ARE the provider
- * pattern — any component that calls useFavorites() gets its own connection
- * to this state. We'll later lift this into a Context so all screens share
- * the same favorites list (like Provider.of<Favorites>(context) in Flutter).
- */
+/** Custom hook for managing favorite quotes with AsyncStorage persistence. */
 export const useFavorites = () => {
   const [favorites, setFavorites] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Load favorites from AsyncStorage on mount (like initState in Flutter)
+  // Load favorites from AsyncStorage on mount
   useEffect(() => {
     loadFavorites();
   }, []);
@@ -84,5 +72,5 @@ export const useFavorites = () => {
     [favorites],
   );
 
-  return {favorites, loading, addFavorite, removeFavorite, isFavorite};
+  return {favorites, loading, addFavorite, removeFavorite, isFavorite, reloadFavorites: loadFavorites};
 };

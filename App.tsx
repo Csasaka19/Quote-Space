@@ -1,10 +1,4 @@
-/**
- * QuoteSpace — Daily Quote App
- * Root component that wraps the app with necessary providers.
- *
- * Flutter parallel: This is your MaterialApp widget, wrapped with
- * MultiProvider (SafeAreaProvider + FavoritesProvider).
- */
+/** QuoteSpace — Daily Quote App. Root component with providers. */
 
 import React from 'react';
 import {StatusBar} from 'react-native';

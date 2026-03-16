@@ -1,17 +1,16 @@
-import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Share} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+  Share,
+  Animated,
+} from 'react-native';
 import {Quote} from '../types/quote';
 
-/**
- * Reusable card that displays a quote with favorite, share, and new quote actions.
- *
- * Flutter parallel: This is a custom StatelessWidget — a pure UI component
- * that receives data and callbacks via props (like constructor params in Flutter).
- * TouchableOpacity = InkWell/GestureDetector with built-in opacity feedback.
- * ActivityIndicator = CircularProgressIndicator.
- * Share.share() = Share.share() from the share_plus package in Flutter — opens
- * the native OS share sheet (same on both Android and iOS).
- */
+/** Reusable card that displays a quote with favorite, share, and new quote actions. */
 
 interface QuoteCardProps {
   quote: Quote | null;
@@ -28,7 +27,7 @@ const shareQuote = async (quote: Quote) => {
       message: `"${quote.quote}" — ${quote.author}\n\nShared via QuoteSpace`,
     });
   } catch {
-    // User cancelled or share failed — no action needed
+    // User cancelled or share failed
   }
 };
 
@@ -40,6 +39,29 @@ const QuoteCard = ({
   onToggleFavorite,
   onNewQuote,
 }: QuoteCardProps) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(20)).current;
+
+  // Fade-in + slide-up when a new quote appears
+  useEffect(() => {
+    if (quote && !loading && !error) {
+      fadeAnim.setValue(0);
+      slideAnim.setValue(20);
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+        Animated.timing(slideAnim, {
+          toValue: 0,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  }, [quote, loading, error, fadeAnim, slideAnim]);
+
   if (loading) {
     return (
       <View style={[styles.card, styles.centered]}>
@@ -66,7 +88,11 @@ const QuoteCard = ({
   }
 
   return (
-    <View style={styles.card}>
+    <Animated.View
+      style={[
+        styles.card,
+        {opacity: fadeAnim, transform: [{translateY: slideAnim}]},
+      ]}>
       <Text style={styles.quoteText}>"{quote.quote}"</Text>
       <Text style={styles.authorText}>— {quote.author}</Text>
       <Text style={styles.categoryText}>{quote.category}</Text>
@@ -95,7 +121,7 @@ const QuoteCard = ({
           <Text style={styles.shareIcon}>↗</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 

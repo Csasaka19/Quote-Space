@@ -2,17 +2,7 @@ import React, {createContext, useContext} from 'react';
 import {useFavorites} from './useFavorites';
 import {Quote} from '../types/quote';
 
-/**
- * Context that shares favorite quotes state across all screens.
- *
- * Flutter parallel: This is exactly like wrapping your MaterialApp with
- * ChangeNotifierProvider<FavoritesModel>. Any child widget (component)
- * can access it via Provider.of or context.watch — here we use useContext().
- *
- * Why a Context? Without it, each screen calling useFavorites() would get
- * its own separate state. Context lifts the state up so Home and Favorites
- * screens share the same list — just like Provider does in Flutter.
- */
+/** Context that shares favorite quotes state across all screens. */
 
 interface FavoritesContextType {
   favorites: Quote[];
@@ -20,6 +10,7 @@ interface FavoritesContextType {
   addFavorite: (quote: Quote) => void;
   removeFavorite: (quote: Quote) => void;
   isFavorite: (quote: Quote) => boolean;
+  reloadFavorites: () => Promise<void>;
 }
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(

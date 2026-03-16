@@ -2,12 +2,7 @@ import {Quote} from '../types/quote';
 import {API_BASE_URL} from '../utils/constants';
 import {API_NINJAS_KEY} from '@env';
 
-/**
- * Fetches a random quote from the API Ninjas quotes endpoint.
- *
- * Flutter parallel: This is like a Repository class method that calls
- * http.get() — same concept, just using fetch() instead of the http package.
- */
+/** Fetches a random quote from the API Ninjas quotes endpoint. */
 export const fetchRandomQuote = async (): Promise<Quote> => {
   const response = await fetch(`${API_BASE_URL}/quotes`, {
     headers: {

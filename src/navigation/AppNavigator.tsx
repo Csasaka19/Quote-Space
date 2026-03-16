@@ -5,17 +5,7 @@ import {Text, StyleSheet} from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 
-/**
- * Bottom tab navigator with Home and Favorites screens.
- *
- * Flutter parallel:
- * - NavigationContainer = MaterialApp (wraps everything, holds navigation state)
- * - createBottomTabNavigator = BottomNavigationBar + IndexedStack
- * - Tab.Screen = each route/page in your BottomNavigationBar items
- *
- * In Flutter you'd manage the selected index with setState or a provider.
- * React Navigation handles that internally — you just declare the screens.
- */
+/** Bottom tab navigator with Home and Favorites screens. */
 
 const Tab = createBottomTabNavigator();
 

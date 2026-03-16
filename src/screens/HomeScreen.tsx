@@ -9,14 +9,7 @@ import GradientBackground from '../components/GradientBackground';
 import {Quote} from '../types/quote';
 import {STORAGE_KEYS} from '../utils/constants';
 
-/**
- * Home screen — daily quote with animated gradient background.
- *
- * Flutter parallel:
- * - The gradient index increments on each new quote, triggering
- *   GradientBackground to animate — like updating a ValueNotifier
- *   that an AnimatedBuilder listens to in Flutter.
- */
+/** Home screen — daily quote with animated gradient background. */
 const HomeScreen = () => {
   const insets = useSafeAreaInsets();
   const {addFavorite, removeFavorite, isFavorite} = useFavoritesContext();
