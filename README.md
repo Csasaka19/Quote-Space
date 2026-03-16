@@ -72,13 +72,13 @@ npm run ios
 
 ### Environment Setup
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root with your API Ninjas key:
 
 ```env
-API_NINJAS_KEY=your_api_key_here
+API_NINJAS_KEY=<your_key>
 ```
 
-> Get your free API key at [api-ninjas.com/register](https://api-ninjas.com/register)
+> Sign up for a free API key at [api-ninjas.com/register](https://api-ninjas.com/register). The `.env` file is gitignored and will not be committed.
 
 ## Architecture Overview
 
@@ -98,7 +98,7 @@ This app uses the [API Ninjas Quotes API](https://api-ninjas.com/api/quotes):
 
 ```
 GET https://api.api-ninjas.com/v1/quotes
-Header: X-Api-Key: YOUR_API_KEY
+Header: X-Api-Key: <your_key>
 ```
 
 Returns an array of quote objects:

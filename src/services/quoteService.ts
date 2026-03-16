@@ -1,7 +1,6 @@
 import {Quote} from '../types/quote';
 import {API_BASE_URL} from '../utils/constants';
-
-const API_KEY = 'YOUR_API_KEY_HERE'; // TODO: Replace with env variable
+import {API_NINJAS_KEY} from '@env';
 
 /**
  * Fetches a random quote from the API Ninjas quotes endpoint.
@@ -12,7 +11,7 @@ const API_KEY = 'YOUR_API_KEY_HERE'; // TODO: Replace with env variable
 export const fetchRandomQuote = async (): Promise<Quote> => {
   const response = await fetch(`${API_BASE_URL}/quotes`, {
     headers: {
-      'X-Api-Key': API_KEY,
+      'X-Api-Key': API_NINJAS_KEY,
     },
   });
 
